@@ -26,5 +26,13 @@ public class UniversityController {
         }
     }
 
+    @GetMapping("/universities/async")
+    public ResponseEntity<?> getUniversitiesByCountryAsync(@RequestParam(required = false) String[] country) {
+        if (country != null && country.length > 0) {
+            return ResponseEntity.ok(universityService.getUniversitiesByCountriesAsync(country));
+        } else {
+            return ResponseEntity.ok(universityService.getUniversities());
+        }
+    }
 
 }
