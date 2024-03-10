@@ -5,12 +5,14 @@ import com.example.demo.Service.UniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
 
 @RestController
+@RequestMapping("/universities")
 public class UniversityController {
     private final UniversityService universityService;
 
@@ -19,7 +21,7 @@ public class UniversityController {
         this.universityService = universityService;
     }
 
-    @GetMapping("/universities")
+    @GetMapping
     public ResponseEntity<?> getUniversitiesByCountry(@RequestParam(required = false) String[] country) {
         if (country != null && country.length > 0) {
             return ResponseEntity.ok(universityService.getUniversitiesByCountries(country));
@@ -28,7 +30,7 @@ public class UniversityController {
         }
     }
 
-    @GetMapping("/universities/async")
+    @GetMapping("/async")
     public CompletableFuture<ResponseEntity<?>> getUniversitiesByCountryAsync(@RequestParam(required = false) String[] country) {
         if (country != null && country.length > 0) {
             return universityService.getUniversitiesByCountriesAsync(country)
