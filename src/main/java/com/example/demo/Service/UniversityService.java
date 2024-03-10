@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Pojo.UniversityPojo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,7 +16,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class UniversityService implements UniversityServiceInterface{
     private final RestTemplate restTemplate;
-    public String BASE_URL = "http://universities.hipolabs.com/search";
+    @Value("${BASE_URL}")
+    private String BASE_URL;
 
     @Autowired
     public UniversityService(RestTemplate restTemplate){
