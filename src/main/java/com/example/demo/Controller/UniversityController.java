@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.CompletableFuture;
-
 @RestController
 @RequestMapping("/universities")
 public class UniversityController {
@@ -31,13 +29,12 @@ public class UniversityController {
     }
 
     @GetMapping("/async")
-    public CompletableFuture<ResponseEntity<?>> getUniversitiesByCountryAsync(@RequestParam(required = false) String[] country) {
+    public ResponseEntity<?> getUniversitiesByCountryAsync(@RequestParam(required = false) String[] country) {
         if (country != null && country.length > 0) {
-            return universityService.getUniversitiesByCountriesAsync(country)
-                    .thenApply(ResponseEntity::ok);
+            return ResponseEntity.ok(universityService.getUniversitiesByCountriesAsync(country));
         } else {
             UniversityPojo[] universities = universityService.getUniversities();
-            return CompletableFuture.completedFuture(ResponseEntity.ok(universities));
+            return ResponseEntity.ok(universityService.getUniversities());
         }
     }
 }

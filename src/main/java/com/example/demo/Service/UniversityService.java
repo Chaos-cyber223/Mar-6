@@ -45,23 +45,24 @@ public class UniversityService implements UniversityServiceInterface{
         return allUniversities.toArray(new UniversityPojo[0]);
     }
 
-    @Override
-    public CompletableFuture<UniversityPojo[]> getUniversitiesByCountriesAsync(String[] countries) {
+    public UniversityPojo[] getUniversitiesByCountriesAsync(String[] countries) {
         CompletableFuture<UniversityPojo[]>[] futures = Arrays.stream(countries)
-
                 .map(country -> CompletableFuture.supplyAsync(() -> {
                     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(BASE_URL)
                             .queryParam("country", country);
-                    String url = builder.toUriString().replace("%20", "+");;
+                    String url = builder.toUriString().replace("%20", "+");
                     System.out.println("completable url:" + url);
                     return restTemplate.getForObject(url, UniversityPojo[].class);
                 }))
                 .toArray(CompletableFuture[]::new);
 
-        return CompletableFuture.allOf(futures)
-                .thenApply(voided -> Arrays.stream(futures)
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures);
+        UniversityPojo[] result = allFutures.thenApply(voided -> Arrays.stream(futures)
                         .flatMap(future -> Arrays.stream(future.join()))
-                        .toArray(UniversityPojo[]::new));
+                        .toArray(UniversityPojo[]::new))
+                .join();
+
+        return result;
     }
 
 }
