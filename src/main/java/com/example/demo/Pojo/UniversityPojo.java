@@ -1,4 +1,4 @@
-package com.example.demo.DAO;
+package com.example.demo.Pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Data
-public class University {
+public class UniversityPojo {
         @JsonProperty("alpha_two_code")
         private String alphaTwoCode;
 
